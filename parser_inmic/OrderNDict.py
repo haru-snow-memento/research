@@ -33,4 +33,3 @@ class OrderNDict(OrderedDict):
         else:
             raise KeyError("key must be object of int or str.")
         self._reset_apply_li()
-
