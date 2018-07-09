@@ -1,12 +1,9 @@
 #!/usr/bin/env python3
 
 # formal lib
-import numpy as np
-from numpy import linalg as la
-import sys
-import os
 # my lib
 from .core import EnterInfoBase
+import pyautogui
 
 
 class EnterTbInfo(EnterInfoBase):

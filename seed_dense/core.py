@@ -47,6 +47,7 @@ class DensityDistBase(object):
 
 
     def standardize_total_density(self, standardized_va):
+        # you must modify
         dif = self.ranks[1] - self.ranks[0]
         total_va = np.sum(self.rank_vas) * dif
         ratio = standardized_va / total_va
@@ -66,18 +67,23 @@ class DistEqualRanks(DensityDistBase):
             raise AssertionError("you enter minus radius."
                                  "you must enter positive value into min_va")
 
+
 class DistAutomaticRanks(DensityDistBase):
     def __init__(self):
         raise ImportError
 
-    def _set_ranks(self, min_va, max_va, ratio_for_automesh=1.0/2.0):
-        self.ranks = None
+    def _set_ranks(self, min_va, max_va,
+                   ratio_auto=1.0/2.0, seq=1000):
+        tmp_lins = np.linspace(min_va, max_va,
+                               seq=1000)
+        raise ImportError
 
     def _set_caller(self, ):
         """
         it's hooked
         """
         pass # you must modify
+
 
 class DistManualRanks
     def __init__(self):
