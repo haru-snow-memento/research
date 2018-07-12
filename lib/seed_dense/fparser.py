@@ -46,6 +46,3 @@ class FuncInputGenerator():
         elif tmp_ftype == "LORENTZIAN":
             pass
 
-
-class Fparser(ArgumentParser):
-    pass

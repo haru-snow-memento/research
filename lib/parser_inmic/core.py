@@ -2,10 +2,6 @@
 # !coding:utf-8
 
 
-import numpy as np
-import os
-import sys
-import os
 from collections import OrderedDict
 import json
 
@@ -62,12 +58,12 @@ class DivivdeLines(object):
                 try:
                     cmt = self.totlines[(vl_num + 1):]
                     self.cmts_li.append(cmt)
-                except IndexError as e:
+                except IndexError:
                     print("there is no comment line in the final lines")
                     break
 
-
     def write_mic_input(self, wpath, only_va=False):
+
         if type(only_va) is not bool:
             raise AttributeError
         if only_va:
