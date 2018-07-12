@@ -3,8 +3,7 @@
 # formal lib
 import os
 # mylib
-from admin_multisub import MultiSubP
-
+from admin_process import MultiSubP
 
 ENV = os.environ.copy()
 
