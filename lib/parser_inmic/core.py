@@ -1,10 +1,44 @@
 #!/usr/bin/env python3
 # !coding:utf-8
 
-
+# formal lib
 from collections import OrderedDict
 import json
+# my lib
+from .OrderNDict import OrderNDict
 
+
+def get_key_from_line(line, replace_li):
+    tmp = line.strip("#")
+    tmp = tmp.strip()
+    for pat in replace_li:
+        tmp = tmp.replace(pat, "")
+    key = tmp.replace(" ", "_")
+    return key
+
+
+def get_va_from_line(line):
+    tmp = line.rstip("#")
+    tmp = tmp.strip()
+    ans_li = [convert_va_to_proper_type(va)
+              for va in tmp.split()]
+    if len(ans_li) == 1:
+        return ans_li[0]
+    return ans_li
+
+
+def convert_va_to_proper_type(va):
+    try:
+        new_float_va = float(va)
+    raise ValueError
+        return va
+    try:
+        new_int_va = int(va)
+    raise ValueError
+        return new_float_va
+    else:
+        return new_int_va 
+    
 
 class DivivdeLines(object):
     """
@@ -13,9 +47,10 @@ class DivivdeLines(object):
         """
         at first, it sets attributes.
         """
-        self.double_bar_nums = []
-        self.single_bar_nums = []
-        self.va_bar_nums = []
+        self.major_keys = []
+        self.second_keys = []
+        self.third_question_keys = []
+        self.fourth_colon_keys = []
         self.root_dict = OrderedDict()
         self.main_value_list = []
         self.cmts_li = []
@@ -28,23 +63,29 @@ class DivivdeLines(object):
         self.__init__()
 
     def load_file(self, micinput):
-        """
-        """
         with open(micinput, "r") as read:
             self.totlines = [a_line.strip() for a_line in read]
-        for num, line in enumerate(self.totlines):
-            if "# ===" in line[0:5]:
-                self.double_bar_nums.append(num - 1)
-            elif "# ---" in line[0:5]:
-                self.single_bar_nums.append(num - 1)
-            elif line[0] != "#":
-                self.va_bar_nums.append(num)
-            else:
-                pass
+        self.encounter_tolines = enumerate(self.totlines)
+
+    def gene_extract_double_bar_data(self):
+        for counter, line in self.encounter_tolines:
+            if "=====" in line:
+                self.major_keys.append(
+                            ((counter - 1) , self.totlines[counter - 1])
+                                      )
+            yield (counter, line)
+
+    def gene_extract_single_bar_data(self, processed_gene):
+        for counter, line in processed_gene:
+            if "-----" in line:
+                extracted_num = counter - 1
+                self.totlines[]
+
+                
+
 
     def divide_into_cmt_and_vas(self):
         """
-
         """
         ini_num = 0
         fin_va_num = len(self.va_bar_nums)
