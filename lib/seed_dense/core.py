@@ -141,12 +141,3 @@ class AdminManyFuncs(object):
             caller_li = getattr(self, caller_li_attr)
             for caller in caller_li:
                 yield caller
-
-
-if __name__ == "__main__":
-    msg = "this program helps to input file applying to MICRESS seed "\
-          "density model"
-    parser = argparse.ArgumentParser(description=msg,
-                                     fromfile_prefix_chars="@")
-    parser.add_argument("--write_file")
-    parser.add_argument("--infile_parse")
