@@ -1,15 +1,26 @@
 #!/usr/bin/env python3
 
-
+# formal lib
 import numpy as np
 from math import exp
 import argparse
+# my lib
 from .caller import DecExpCaller
 from .caller import GaussCaller
 from .caller import DecExpCaller
+from .search_ratio import get_ranks_ids
+
+
+def extract_newdict(old_dicts, keys_li):
+    new_dict = {key: va for key, va in old_dicts
+                if key in keys_li}
+    return new_dict
 
 
 class DensityDistBase(object):
+    set_ranks_args = None
+    caller_args = None
+
     def __init__(self):
         raise ImportError
 
