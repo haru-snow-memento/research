@@ -38,7 +38,8 @@ def get_ranks_ids(max_id, total_ars, ranks_num, ratio=1.0/2.0):
             l_threshold = l_threshold * ratio
         else:
             continue
-    ranks_ids_ar = _merge_RandL_ranksids(r_ranks_ids, l_ranks_ids,
+    ranks_ids_ar = _merge_RandL_ranksids(r_ranks_ids,
+                                         l_ranks_ids,
                                          max_id, ranks_num)
     return ranks_ids_ar
 

@@ -43,7 +43,29 @@ def cnvt_tottxt_to_df(fpath):
 
 def gene_multi_df_from_tottxt(fpath):
     with open(fpath) as read:
-        processed_gene = 
+        cmt_ids = extract_cmt_lineid(read)
+    start_ids = _search_start_ids(cmt_ids)
+    start_ids = cmt_ids[start_ids:]
+
+    
+        
+
+def extract_cmt_lineid(read):
+    cmt_ids = []
+    for num, line in enumerate(read):
+        tmp = line.strip()
+        if tmp[0] == "#":
+            cmt_ids.append(num)
+        else:
+            continue
+
+def _search_start_ids(cmt_ids):
+    for counter, cmtid in enumerate(cmt_ids):
+        if counter != cmt_ids:
+            return counter - 1
+
+        
+
     
     
 
