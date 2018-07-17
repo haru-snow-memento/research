@@ -3,9 +3,8 @@
 
 import numpy as np
 import pandas as pd
-from pandas import DataFrame, Series
-import os
-import sys
+from math import pi
+
 
 SIM_TIME_COL = "simulation_time(s)"
 GRAIN_NUM = "grain_number"
@@ -20,8 +19,6 @@ LIST_OF_NEIGHBORS = "list_of_neighbors_id"
 DF_COLNMS = [SIM_TIME_COL, GRAIN_NUM, PHASE_NUM, SURFACE, VAR_SURFACE,
              PERIMETER, AVERAGED_CURVATURE, STATUS, NUM_NEIGHBOURS,
              LIST_OF_NEIGHBORS]
-
-
 
 
 def cnvt_tottxt_to_df(fpath):
@@ -52,12 +49,11 @@ def gene_multi_df_from_tottxt(fpath):
     data_idstp_li = _extract_data_stfin_idstps(
                                     readcontainer
                                              )
-    multi_df_li = []
     for start_id, fin_id in data_idstp_li:
         partial_df = pd.read_csv(
                         readcontainer[start_id:fin_id],
                         header=None,
-                        delim_whitespace=True
+                        delim_whitespace=True,
                         skipinitialspace=True
                                 )
         yield partial_df
@@ -74,7 +70,7 @@ def _extract_data_stfin_idstps(readcontainer):
     data_idstp_li = []
     for counter, start_id in enumerate(start_ids[:-1]):
         fin_id = start_ids[counter + 1]
-        data_idstp_li.append((start_ids: fin_id))
+        data_idstp_li.append((start_ids, fin_id))
     return data_idstp_li
 
 
@@ -90,6 +86,7 @@ def _extract_cmt_lineid(read):
         else:
             continue
 
+
 def _search_start_ids(cmt_ids):
     """
     it's caller by _extract_data_stfin_idstps
@@ -98,10 +95,36 @@ def _search_start_ids(cmt_ids):
         if counter != cmt_ids:
             return counter - 1
 
-        
+
 class AnalyGD(object):
     def __init__(self):
         pass
 
-    def load_dfs(self):
-        pass
+    def load_dfs(self, fpath):
+        multidf_gene = gene_multi_df_from_tottxt(fpath)
+        self.multi_dfs(multidf_gene)
+
+    def _calc_weighted_averaged_diameter(self, target_df):
+        surface_vaar = target_df["SURFACE"].value
+        diameters = 2 * np.sqrt(surface_vaar / (4 * pi))
+        weighted_ave_diameter = np.average(diameters, weights=surface_vaar)
+        mom2_elm = (diameters - weighted_ave_diameter) ** 2
+        dispersion = np.average(mom2_elm, weights=surface_vaar)
+        return (weighted_ave_diameter, dispersion)
+
+    def set_averaged_diameters(self):
+        self.ave_disp_diameters_li = [self._calc_weighted_averaged_diameter(df)
+                                      for df in self.multi_dfs]
+
+    def add_partial_data_of_diameter(self, fpath, nums):
+        wlines = []
+        for i in range(nums):
+            tpdata = self.ave_disp_diameters_li[i]
+            line = self._help_make_linedata(tpdata)
+            wlines.append(line)
+        with open(fpath, "a") as add:
+            add.writelines(wlines)
+
+    def _help_make_linedata(self, ave_disp_tp):
+        line = " ".join(ave_disp_tp) + "\n"
+        return line
