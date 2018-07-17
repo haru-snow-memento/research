@@ -18,27 +18,22 @@ def extract_newdict(old_dicts, keys_li):
 class DensityDistBase(object):
     set_ranks_args = None
     caller_args = None
+    ranks = None
 
     def __init__(self):
         raise ImportError
-    
+
     def _set_caller(self, caller_ob):
         if not hasattr(caller_ob, "__call__"):
             raise AttributeError
         self.__call__ = caller_ob
         self.caller = caller_ob
 
-    def _set_ranks(self):
+    def _set_ranks(self, **kwargs):
         """
         argument value is distance(micron meter)
         """
         raise ImportError
-
-    def _set_caller(self, caller_ob):
-        if not hasattr(caller_ob, "__call__"):
-            raise AttributeError
-        self.__call__ = caller_ob
-        self.caller = caller_ob
 
     def _set_rank_vas(self):
         self.rank_vas = np.apply_along_axis(self.caller,
@@ -57,11 +52,14 @@ class DensityDistBase(object):
         result[:, 1] = self.rank_vas
         with open(wpath, "w") as write:
             write.write("# it contains seed density data in the following.")
+            # you should write caller_data
             np.savetxt(wpath, result)
         print("completing writing file.")
 
     def standardize_total_density(self, standardized_va,
                                   min_radius=1.0E-8):
+        # you must modify and confirm
+        """
         tmp = np.empty(len(self.ranks) + 1)
         width_ars = np.empty_like(tmp)
         tmp[:-1] = self.ranks
@@ -75,17 +73,29 @@ class DensityDistBase(object):
         self.rank_vas = self.rank_vas * ratio
         print("standardize_total_density")
         print("total density is " + str(standardized_va))
+        """
+        raise ImportError
 
 
 class DistAutomaticRanks(DensityDistBase):
-    def __init__(self):
-        raise ImportError
+    def __init__(self, caller_ob, **kwargs):
+        self._set_caller(caller_ob)
+        self._set_rank_vas(**kwargs)
+        self._set_rank_vas()
+        print("completely set.")
+        print("you can write data.")
 
-    def _set_ranks(self, min_va, max_va, ranks_num
-                   ratio_auto=1.0/2.0, seq=1000):
+    def _set_ranks(self, min_va=1.0E-8, max_va=1.0,
+                   ranks_num=10, ratio_auto=1.0/2.0,
+                   seq=1000):
         tmp_lins = np.linspace(min_va, max_va,
                                seq=1000)
         candidate_vas = np.apply_along_axis(self.caller,
                                             0,
                                             tmp_lins)
-        max_id = np.argmax()
+        max_id = np.argmax(candidate_vas)
+        ranks_ids_ar = get_ranks_ids(max_id, tmp_lins,
+                                     candidate_vas,
+                                     ranks_num,
+                                     ratio=ratio_auto)
+        self.ranks = tmp_lins[ranks_ids_ar]
