@@ -26,7 +26,6 @@ class DensityDistBase(object):
     def _set_caller(self, caller_ob):
         if not hasattr(caller_ob, "__call__"):
             raise AttributeError
-        self.__call__ = caller_ob
         self.caller = caller_ob
 
     def _set_ranks(self, **kwargs):
@@ -41,7 +40,6 @@ class DensityDistBase(object):
                                             self.ranks)
 
     def reset_caller(self):
-        self.__call__ = None
         self.caller = None
         print("reset caller in DensityDist instance")
 
@@ -52,9 +50,17 @@ class DensityDistBase(object):
         result[:, 1] = self.rank_vas
         with open(wpath, "w") as write:
             write.write("# it contains seed density data in the following.")
-            # you should write caller_data
+            write.write("# " + self.caller_info)
             np.savetxt(wpath, result)
         print("completing writing file.")
+
+    def set_caller_info(self):
+        func_nm = self.caller.param_info[0]
+        param_li = []
+        for param_line in self.caller.param_info[1:]:
+            param = param_line.split(" = ")[1]
+            param_li.append(param)
+        self.caller_info = "_".join(([func_nm] + param_li))
 
     def standardize_total_density(self, standardized_va,
                                   min_radius=1.0E-8):
@@ -82,6 +88,7 @@ class DistAutomaticRanks(DensityDistBase):
         self._set_caller(caller_ob)
         self._set_rank_vas(**kwargs)
         self._set_rank_vas()
+        self.set_caller_info()
         print("completely set.")
         print("you can write data.")
 

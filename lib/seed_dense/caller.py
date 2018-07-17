@@ -12,6 +12,7 @@ class DecExpCaller(object):
     parameter are N0 and d0
     """
     def __init__(self, d0, N0=1.0):
+        self.args = (d0, N0)
         self.param_info = ["decexp",
                            " d0 = " + str(d0),
                            " N0 = " + str(N0)]
@@ -32,6 +33,7 @@ class LogNormalCaller(object):
     C * exp(-A/(2*(sigma**2))
     """
     def __init__(self, d0, sigma, N0=1):
+        self.args = (d0, sigma, N0)
         self.param_info = ["lognormal",
                            "d0 = " + str(d0),
                            "sigma = " + str(sigma),
@@ -50,6 +52,7 @@ class LogNormalCaller(object):
 
 class GaussCaller(object):
     def __init__(self, a, b, C=1):
+        self.args = (a, b, C)
         self.param_info = ["gaussian",
                            "a = " + str(a),
                            "b = " + str(b),
