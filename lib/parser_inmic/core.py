@@ -70,8 +70,11 @@ class DivivdeLines(object):
     def gene_extract_double_bar_data(self):
         for counter, line in self.encounter_tolines:
             if "=====" in line:
+                main_key = get_key_from_line(
+                                   self.totlines[conter -1]
+                                            )
                 self.major_keys.append(
-                            ((counter - 1) , self.totlines[counter - 1])
+                ((counter - 1) , main_key])
                                       )
             yield (counter, line)
 
@@ -79,11 +82,15 @@ class DivivdeLines(object):
         for counter, line in processed_gene:
             if "-----" in line:
                 extracted_num = counter - 1
-                self.totlines[]
+                second_key_va = get_key_from_line(
+                                    self.totlines[extracted_num]
+                                                 ) 
+                self.second_keys.append(
+                        (extracted_num, second_key_va)
+                                       )
+        yield (counter, line)
 
                 
-
-
     def divide_into_cmt_and_vas(self):
         """
         """
