@@ -90,6 +90,10 @@ class DivivdeLines(object):
                                        )
         yield (counter, line)
 
+    def gene_extract_value_keys(self, processed_gene):
+        for counter, line in processed_gene:
+            if line[-1] == ":" or line[-1] == "?":
+                
                 
     def divide_into_cmt_and_vas(self):
         """
