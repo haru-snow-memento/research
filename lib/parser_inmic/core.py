@@ -47,10 +47,16 @@ class DivivdeLines(object):
         """
         at first, it sets attributes.
         """
+        # =================
         self.major_keys = []
+        # -----------------
         self.second_keys = []
+        # ?
         self.third_question_keys = []
+        # :
         self.fourth_colon_keys = []
+        # ]
+        self.fifth_question_keys = []
         self.root_dict = OrderedDict()
         self.main_value_list = []
         self.cmts_li = []

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+
 from math import exp
 from math import sqrt
 from math import log
@@ -8,7 +9,7 @@ from math import pi as PI
 
 class DecExpCaller(object):
     """
-    (N0 / do)*exp(-d/d0) 
+    (N0 / do)*exp(-d/d0)
     parameter are N0 and d0
     """
     def __init__(self, d0, N0=1.0):
@@ -23,7 +24,6 @@ class DecExpCaller(object):
 
     def __call__(self, d):
         return self.caller(d)
-
 
 
 class LogNormalCaller(object):
@@ -64,7 +64,3 @@ class GaussCaller(object):
 
     def __call__(self, x):
         return self.caller(x)
-
-class LorentzCaller(object):
-    def __init__(self):
-        raise ImportError
