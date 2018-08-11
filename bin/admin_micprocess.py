@@ -20,7 +20,7 @@ if __name__ == "__main__":
     parser.add_argument("--outdir", type=str, nargs="?", default=None)
     parser.add_argument("--set_read", default=True, action="store_false")
     parser.add_argument("--time_out", default=None, type=float, nargs="?")
-    parser.add_argument("--save_memory", default=False,
+    parser.add_argument("--off_save_memory", default=True,
                         action="store_true")
     args = parser.parse_args()
     READ_FILE = args.read_file
@@ -28,9 +28,13 @@ if __name__ == "__main__":
     OUT_DIR = args.outdir
     SET_READ = args.set_read
     TIME_OUT = args.time_out
+    OFF_SAVE_MEMORY = args.off_save_memory
     admin_multisub_ins = MultiSubP(READ_FILE, SET_READ)
+
     if OUT_DIR is not None:
         admin_multisub_ins.set_output_fpipe(OUT_DIR)
+    if OFF_SAVE_MEMORY:
+        admin_multisub_ins.remove_output_pipe()
     proc_gene = admin_multisub_ins.add_input_to_proc_gene(INPUT_STR)
     proc_li = []
     if TIME_OUT is not None:
@@ -44,5 +48,4 @@ if __name__ == "__main__":
         for proc in run_procs:
             print(proc.communicate())
             proc_li.append(proc)
-        import ipdb; ipdb.set_trace()
         print("finish all calculation")

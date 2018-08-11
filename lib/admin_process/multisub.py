@@ -28,6 +28,11 @@ def endless_popen_pipe_gene():
         yield subprocess.PIPE
 
 
+def endless_yiled_none():
+    while True:
+        yield None
+
+
 class MultiSubP(object):
     def __init__(self, fpath, set_read=True):
         self.read = open(fpath, "r")
@@ -35,6 +40,9 @@ class MultiSubP(object):
         self.output_pipe_gene = None
         if set_read:
             self._set_read()
+
+    def remove_output_pipe(self):
+        self.trush_outpipe = True
 
     def _set_read(self):
         self.read = [line.strip() for line in self.read]
@@ -50,13 +58,15 @@ class MultiSubP(object):
             self.input_pipe_gene = endless_popen_pipe_gene()
         if self.output_pipe_gene is None:
             self.output_pipe_gene = endless_popen_pipe_gene()
+        if self.trush_outpipe:
+            self.output_pipe_gene = endless_yiled_none()
         self.base_gene = zip(self.read,
                              self.input_pipe_gene,
                              self.output_pipe_gene)
         for one_line, input_pipe, out_pipe in self.base_gene:
             cmd = one_line.split()
             proc = Popen(cmd, shell=True, env=ENV,
-                         stdin=subprocess.PIPE, stdout=None)
+                         stdin=subprocess.PIPE, stdout=out_pipe)
             yield proc
 
     def add_input_to_proc_gene(self, add_input=b"a"):
