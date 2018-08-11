@@ -16,10 +16,12 @@ if __name__ == "__main__":
     # required arguments
     parser.add_argument("--read_file", type=str, nargs="?", required=True)
     # input_str
-    parser.add_argument("--input_str", type=str, nargs="?", default="\n")
+    parser.add_argument("--input_str", type=str, nargs="?", default=b"\r")
     parser.add_argument("--outdir", type=str, nargs="?", default=None)
     parser.add_argument("--set_read", default=True, action="store_false")
     parser.add_argument("--time_out", default=None, type=float, nargs="?")
+    parser.add_argument("--save_memory", default=False,
+                        action="store_true")
     args = parser.parse_args()
     READ_FILE = args.read_file
     INPUT_STR = args.input_str
@@ -32,12 +34,15 @@ if __name__ == "__main__":
     proc_gene = admin_multisub_ins.add_input_to_proc_gene(INPUT_STR)
     proc_li = []
     if TIME_OUT is not None:
-        for proc in proc_gene:
+        run_procs = [proc for proc in proc_gene]
+        for proc in run_procs:
             proc.communicate(TIME_OUT)
             proc_li.append(proc)
         print("finish all calculation")
     else:
-        for proc in proc_gene:
-            proc.communicate()
+        run_procs = [proc for proc in proc_gene]
+        for proc in run_procs:
+            print(proc.communicate())
             proc_li.append(proc)
+        import ipdb; ipdb.set_trace()
         print("finish all calculation")

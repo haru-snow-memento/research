@@ -18,13 +18,14 @@ def endless_counter(start=0):
 def endless_fobcounter(dir_path, head="tmp_"):
     if not os.path.isdir(dir_path):
         raise OSError("unknown dir path")
-    for num in endless_counter:
+    for num in endless_counter():
         fpath = os.path.join(dir_path, head + num)
         yield open(fpath, "r")
 
 
 def endless_popen_pipe_gene():
-    yield subprocess.PIPE
+    while True:
+        yield subprocess.PIPE
 
 
 class MultiSubP(object):
@@ -36,7 +37,7 @@ class MultiSubP(object):
             self._set_read()
 
     def _set_read(self):
-        self.read = self.read.readlines()
+        self.read = [line.strip() for line in self.read]
 
     def set_input_fpipe(self, in_dir):
         self.input_pipe_gene = endless_fobcounter(in_dir)
@@ -55,11 +56,10 @@ class MultiSubP(object):
         for one_line, input_pipe, out_pipe in self.base_gene:
             cmd = one_line.split()
             proc = Popen(cmd, shell=True, env=ENV,
-                         stdin=input_pipe, stdout=out_pipe)
+                         stdin=subprocess.PIPE, stdout=None)
             yield proc
 
-    def add_input_to_proc_gene(self, add_input="\n"):
-        for proc in self.gene_procs:
+    def add_input_to_proc_gene(self, add_input=b"a"):
+        for proc in self.gene_procs():
             proc.stdin.write(add_input)
-            proc.stdin.flush()
             yield proc
