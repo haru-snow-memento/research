@@ -24,5 +24,3 @@ if __name__ == "__main__":
     DIR_SEARCHED = args.dir_searched
     GLOB_WORD = args.glob_word
     REPLACE_EXT = args.replace_ext
-
-
