@@ -1,16 +1,15 @@
-#!/usr/bim/env python3
+#!/usr/bin/env python3
 
 # formal lib
 import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
 
 
 def multi_bar_plot(re_ar, target_ar, width=0.3):
     if len(re_ar) != len(target_ar):
         raise IndexError("you must set the same length.")
-    target_pos = np.arnage(len(re_ar))
-    ref_pos = np.target_pos + width
+    target_pos = np.arange(len(re_ar))
+    ref_pos = target_pos + width
     plt.bar(target_pos, target_ar, width=0.3,
             align="center", label="target")
     plt.bar(ref_pos, ref_pos, width=0.3,
@@ -35,4 +34,4 @@ if __name__ == "__main__":
     if SAVE_PNG is not None:
         plt.savefig(SAVE_PNG)
     else:
-        iniput()
+        input()
