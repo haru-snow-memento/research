@@ -2,11 +2,14 @@
 
 # formal lib
 import os
+import multiprocess
+import subprocess
 # mylib
 from admin_process import MultiSubP
 
 ENV = os.environ.copy()
-
+MAX_PROCESS = multiprocess.cpu_count()
+PROCESS_LI = [None]*MAX_PROCESS
 
 if __name__ == "__main__":
     import argparse
@@ -36,7 +39,7 @@ if __name__ == "__main__":
     if OFF_SAVE_MEMORY:
         admin_multisub_ins.remove_output_pipe()
     proc_gene = admin_multisub_ins.add_input_to_proc_gene(INPUT_STR)
-    proc_li = []
+    procgg_li = []
     if TIME_OUT is not None:
         run_procs = [proc for proc in proc_gene]
         for proc in run_procs:
@@ -45,7 +48,15 @@ if __name__ == "__main__":
         print("finish all calculation")
     else:
         run_procs = [proc for proc in proc_gene]
-        for proc in run_procs:
-            print(proc.communicate())
-            proc_li.append(proc)
+        
+        while True:
+            try:
+                proc = next(run_procs)
+            except StopIteration:
+                for proc in  PROCESS_LI:
+                    proc = subprocess.Popen()
+                    try:
+                        std, err = proc.communicate(timeout=10)
+                    except:
+
         print("finish all calculation")
