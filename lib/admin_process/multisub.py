@@ -47,9 +47,6 @@ class MultiSubP(object):
     def _set_read(self):
         self.read = [line.strip() for line in self.read]
 
-    def set_input_fpipe(self, in_dir):
-        self.input_pipe_gene = endless_fobcounter(in_dir)
-
     def set_output_fpipe(self, out_dir):
         self.output_pipe_gene = endless_fobcounter(out_dir)
 
