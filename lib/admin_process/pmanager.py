@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import time
+from tqdm import tqdm
 
 
 class VirtualProcess(object):
@@ -39,9 +40,22 @@ class ProcessManager(object):
                         # hook function is written here.
                         working_proc = next(self.process_iter)
                         self.working_process_list[plinum] = working_proc
+                        self.update_tqdm()
                     except StopIteration:
                         break
             else:
                 continue
             break
         self.confirm_end_of_total_process()
+
+    def set_process_tqdm(self, total_proces_num=None):
+        if total_proces_num is not None:
+            self.tqdm_ins = tqdm(total=total_proces_num)
+        else:
+            self.future_process_itr = tqdm(self.future_process_itr)
+
+    def update_tqdm(self):
+        if hasattr(self, "tqdm_ins"):
+            tqdm.update(1)
+        else:
+            pass
