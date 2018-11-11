@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import time
 from tqdm import tqdm
 
 
@@ -22,8 +21,7 @@ class ProcessManager(object):
         std_exits_itr = (proc.poll() for proc in self.working_process_list)
         return std_exits_itr
 
-    def confirm_end_of_total_process(self, wait_time=10):
-        time.sleep(wait_time)
+    def confirm_end_of_total_process(self):
         while True:
             tmp = [cond for cond in self.gene_cond_of_stdexit()
                    if (cond is not None) and (cond == 0)]
@@ -31,16 +29,16 @@ class ProcessManager(object):
                 break
         print("total processes are finished.")
 
-    def run(self, wait_time=10):
+    def run(self):
         while True:
-            time.sleep(wait_time)
-            for plinum, exit_cond in enumerate(self.gene_confirm_stdexit()):
+            for plinum, exit_cond in enumerate(self.gene_cond_of_stdexit()):
                 if exit_cond == 0:
                     try:
                         # hook function is written here.
-                        working_proc = next(self.process_iter)
+                        working_proc = next(self.future_process_itr)
                         self.working_process_list[plinum] = working_proc
-                        self.update_tqdm()
+                        if hasattr(self, "tqdm_ins"):
+                            self.tqdm_ins.update(1)
                     except StopIteration:
                         break
             else:
@@ -51,11 +49,3 @@ class ProcessManager(object):
     def set_process_tqdm(self, total_proces_num=None):
         if total_proces_num is not None:
             self.tqdm_ins = tqdm(total=total_proces_num)
-        else:
-            self.future_process_itr = tqdm(self.future_process_itr)
-
-    def update_tqdm(self):
-        if hasattr(self, "tqdm_ins"):
-            tqdm.update(1)
-        else:
-            pass

@@ -62,7 +62,7 @@ class MultiSubP(object):
                              self.input_pipe_gene,
                              self.output_pipe_gene)
         for one_line, input_pipe, out_pipe in self.base_gene:
-            cmd = one_line.split()
+            cmd = one_line
             proc = Popen(cmd, shell=True, env=ENV,
                          stdin=subprocess.PIPE, stdout=out_pipe)
             yield proc

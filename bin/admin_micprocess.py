@@ -44,5 +44,5 @@ if __name__ == "__main__":
     proc_itr = admin_multisub_ins.add_input_to_proc_gene(INPUT_STR)
     pmanager = ProcessManager(MAX_PROCESS, proc_itr)
     tot_proc_num = admin_multisub_ins.total_proc_num
-    pmanager.set_process_tqdm(total_proc_num=tot_proc_num)
+    pmanager.set_process_tqdm(total_proces_num=tot_proc_num)
     pmanager.run()
