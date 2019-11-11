@@ -52,4 +52,3 @@ class Standardize3DCartesian(object):
         2d_1comp = np.dot(self.new_latvecs[1], 1d_nvec)
         self.new_latvecs[1][0] = 2d_1comp
         self.new_latvecs[1][1] = 2d_2comp
-
